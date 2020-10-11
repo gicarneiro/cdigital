@@ -1,0 +1,27 @@
+version: '2'
+
+services:
+
+  # app:
+  #   build:
+  #     context: ./docker/servidor
+  #     dockerfile: Dockerfile
+  #   image: 'servidor'
+  #   ports:
+  #     - '8080:80'
+  #   volumes:
+  #     - '.:/var/www'
+  #   environment:
+  #     - SYMFONY_VERSION=5
+  #   depends_on:
+  #     - postgres
+
+  postgres:
+    image: postgres:11.5
+    ports: 
+        - "5432:5432"
+    restart: always
+    environment:
+        - "POSTGRES_DB=postgres"
+        - "POSTGRES_USER=postgres"
+        - "POSTGRES_PASSWORD=postgres"
