@@ -3,9 +3,7 @@
 namespace App\Service;
 
 use App\Entity\CarteiraDigital;
-use App\Entity\Transacao;
 use App\Repository\CarteiraDigitalRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Exception\NaoEncontradoException;
 
 class CarteiraDigitalService
@@ -25,14 +23,26 @@ class CarteiraDigitalService
     
     /**
     * @return App\Entity\CarteiraDigital
-    * @param int carteira id
+    * @param int proprietario id
     * @throws App\Exception\NaoEncontradoException
     */
-    public function get($id)
-    {
-        $carteiradigital = $this->repository->find($id);
+    public function getByProprietario($id) :?CarteiraDigital  {
+        $carteiradigital = $this->repository->findOneBy(['proprietario' => $id]);
         if (empty($carteiradigital)) {
-            throw new NaoEncontradoException('Carteira digital ou usuário não encontrados');
+            throw new NaoEncontradoException('Usuário ou carteira digital não encontrados');
+        }
+        return $carteiradigital;
+    }
+
+    /**
+    * @return App\Entity\CarteiraDigital
+    * @param int carteira digital id
+    * @throws App\Exception\NaoEncontradoException
+    */
+    public function get($id) :?CarteiraDigital  {
+        $carteiradigital = $this->repository->findOneBy(['id' => $id]);
+        if (empty($carteiradigital)) {
+            throw new NaoEncontradoException('Carteira digital não encontrada');
         }
         return $carteiradigital;
     }

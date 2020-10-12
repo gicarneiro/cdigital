@@ -1,16 +1,21 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Pessoa;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\CarteiraDigital;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=PessoaFisicaRepository::class)
+ * @ORM\Entity(repositoryClass=PessoaRepository::class)
+ * @ORM\Table(name="pessoas")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="tipo", type="integer")
+ * @ORM\DiscriminatorMap({"1" = "PessoaFisica", "2" = "PessoaJuridica"})
  */
-class PessoaFisica
-{
+abstract class Pessoa {
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -33,10 +38,6 @@ class PessoaFisica
      */
     private $senha;
 
-    /**
-     * @ORM\Column(type="string", length=11)
-     */
-    private $cpf;
 
     /**
      * @ORM\OneToOne(targetEntity=CarteiraDigital::class, mappedBy="proprietario", cascade={"persist", "remove"})
@@ -80,18 +81,6 @@ class PessoaFisica
     public function setSenha(string $senha): self
     {
         $this->senha = $senha;
-
-        return $this;
-    }
-
-    public function getCpf(): ?string
-    {
-        return $this->cpf;
-    }
-
-    public function setCpf(string $cpf): self
-    {
-        $this->cpf = $cpf;
 
         return $this;
     }

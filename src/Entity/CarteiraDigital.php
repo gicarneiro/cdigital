@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Pessoa\Pessoa;
 
 /**
  * @ApiResource()
@@ -29,7 +30,7 @@ class CarteiraDigital
     private $atualizadoEm;
 
     /**
-     * @ORM\OneToOne(targetEntity=PessoaFisica::class, inversedBy="carteiraDigital", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity=Pessoa::class, inversedBy="carteiraDigital", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $proprietario;
@@ -63,12 +64,12 @@ class CarteiraDigital
         return $this;
     }
 
-    public function getProprietario(): ?PessoaFisica
+    public function getProprietario(): ?Pessoa
     {
         return $this->proprietario;
     }
 
-    public function setProprietario(PessoaFisica $proprietario): self
+    public function setProprietario(Pessoa $proprietario): self
     {
         $this->proprietario = $proprietario;
 

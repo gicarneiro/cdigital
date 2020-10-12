@@ -41,10 +41,16 @@ class TransacaoService
      */
     public function transferir(Transacao $transacao): ?Transacao
     {        
+        //verifica é a origem pode enviar transacao
+        if($transacao->getOrigem()->getProprietario() instanceof \App\Entity\Pessoa\PessoaJuridica){
+            throw new \App\Exception\TransacaoException('Carteiras de pessoas jurídicas não podem enviar transferencias');
+        }
+
         //verifica se há saldo disponível
         if($this->carteiraDigitalService->simularTransferencia($transacao->getOrigem(), $transacao->getValor())){
             throw new \App\Exception\TransacaoException('Saldo insuficiente');
         }
+
 
         //realiza transação financeira
         $this->em->getConnection()->beginTransaction(); //poderia deixar implicio no flush

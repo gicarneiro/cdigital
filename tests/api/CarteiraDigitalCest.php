@@ -19,7 +19,7 @@ class CarteiraDigitalCest{
      */
     public function exceptionQuandoCarteiraNaoExiste(\ApiTester $I){
         
-        $I->sendGET("/3/carteiradigital", []);
+        $I->sendGET("/55/carteiradigital", []);
         $I->seeResponseCodeIs(\Codeception\Util\HttpCode::NOT_FOUND); 
     }
 

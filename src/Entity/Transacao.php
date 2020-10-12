@@ -43,7 +43,7 @@ class Transacao
     private $destino;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="decimal", precision=15, scale=2)
      */
     private $valor;
 
