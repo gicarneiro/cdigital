@@ -58,16 +58,13 @@ class TransacaoService {
         }
 
         //realiza transação financeira
-        $this->em->getConnection()->beginTransaction(); //poderia deixar implicio no flush
+        $this->em->getConnection()->beginTransaction(); 
         try {
             $this->autorizador->autorizar();
             $this->carteiraDigitalService->debitar($transacao->getOrigem(), $transacao->getValor());//atualizasaldo origem
             $this->carteiraDigitalService->creditar($transacao->getDestino(), $transacao->getValor());//atualizasaldo destino 
-            $this->em->persist($transacao->getOrigem());       
-            $this->em->persist($transacao->getDestino());       
-            $this->em->persist($transacao); //salva transacao financeira
-            $this->em->flush();
-            $this->mensageiro->dispatch(new TransacaoMessage($transacao->getID()));//enfilera notificação
+            $this->save($transacao); //salva transacao financeira
+            $this->mensageiro->dispatch(new TransacaoMessage($transacao->getId()));//enfilera notificação
             $this->em->getConnection()->commit();
             
             return $transacao;
@@ -76,6 +73,10 @@ class TransacaoService {
             throw $e;
         }
     }
-    
+
+    private function save(Transacao $transacao) :void{            
+        $this->em->persist($transacao); 
+        $this->em->flush();
+    }    
     
 }

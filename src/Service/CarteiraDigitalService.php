@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\CarteiraDigital;
 use App\Repository\CarteiraDigitalRepository;
 use App\Exception\NaoEncontradoException;
+use Doctrine\ORM\EntityManagerInterface;
 
 class CarteiraDigitalService
 {
@@ -13,12 +14,18 @@ class CarteiraDigitalService
     * @var App\Repository\CarteiraDigitalRepository
     */
     private $repository;
+
+    /**
+    * @var Doctrine\ORM\EntityManagerInterface
+    */
+    private $em;
     
     
     
-    public function __construct(CarteiraDigitalRepository $repository)
+    public function __construct(CarteiraDigitalRepository $repository, EntityManagerInterface $em)
     {
         $this->repository = $repository;
+        $this->em = $em;
     }
     
     /**
@@ -57,7 +64,7 @@ class CarteiraDigitalService
     * @param CarteiraDigital 
     * @param int valor 
     */
-    public function simularTransferencia(CarteiraDigital $carteiraDigital, int $valor): ?int { 
+    public function simularTransferencia(CarteiraDigital $carteiraDigital, float $valor): ?int { 
         return $carteiraDigital->getSaldo() - $valor < 0;
     }
     
@@ -67,9 +74,12 @@ class CarteiraDigitalService
     * @param CarteiraDigital 
     * @param int valor 
     */
-    public function debitar(CarteiraDigital $carteiraDigital, int $valor): void { 
+    public function debitar(CarteiraDigital $carteiraDigital, float $valor): void { 
         $novoSaldo = $carteiraDigital->getSaldo() - $valor;
+        var_dump($novoSaldo);
         $carteiraDigital->setSaldo($novoSaldo);
+        $this->em->persist($carteiraDigital);   
+        $this->em->flush();
     }
     
     /**
@@ -78,9 +88,11 @@ class CarteiraDigitalService
     * @param CarteiraDigital 
     * @param int valor 
     */
-    public function creditar(CarteiraDigital $carteiraDigital, int $valor): void { 
+    public function creditar(CarteiraDigital $carteiraDigital, float $valor): void { 
         $novoSaldo = $carteiraDigital->getSaldo() + $valor;
         $carteiraDigital->setSaldo($novoSaldo);
+        $this->em->persist($carteiraDigital);   
+        $this->em->flush();
     }
     
 }

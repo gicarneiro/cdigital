@@ -8,7 +8,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=TransacaoRepository::class)
+ * @ORM\Entity(repositoryClass=TransacaoRepository::class) * 
+ * @ORM\Table(name="transacoes")
  */
 class Transacao
 {
@@ -122,6 +123,7 @@ class Transacao
             'id'=> $this->id,
             'origem'=> $this->origem->getId(),
             'destino'=> $this->destino->getId(),
+            'valor'=> $this->valor
         ];
     }
 }

@@ -8,7 +8,8 @@ use App\Entity\Pessoa\Pessoa;
 
 /**
  * @ApiResource()
- * @ORM\Entity(repositoryClass=CarteiraDigitalRepository::class)
+ * @ORM\Entity(repositoryClass=CarteiraDigitalRepository::class) * 
+ * @ORM\Table(name="carteiras_digitais")
  */
 class CarteiraDigital
 {
