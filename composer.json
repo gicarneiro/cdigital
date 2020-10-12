@@ -27,9 +27,15 @@
         "symfony/serializer": "5.1.*",
         "symfony/twig-bundle": "5.1.*",
         "symfony/validator": "5.1.*",
-        "symfony/yaml": "5.1.*"
+        "symfony/yaml": "5.1.*",
+        "codeception/module-phpbrowser": "^1.0.0",
+        "codeception/module-asserts": "^1.0.0"
     },
     "require-dev": {
+        "codeception/module-db": "^1.0",
+        "codeception/module-doctrine2": "^1.0",
+        "codeception/module-rest": "^1.2",
+        "codeception/module-symfony": "^1.1",
         "symfony/maker-bundle": "^1.21",
         "symfony/stopwatch": "^5.1",
         "symfony/web-profiler-bundle": "^5.1"

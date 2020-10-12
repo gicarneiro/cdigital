@@ -1,0 +1,19 @@
+actor: ApiTester
+modules:
+    enabled:
+        - Symfony:
+            app_path: src
+            environment: test
+        - REST:
+            url: /
+            depends: Symfony
+        - Doctrine2:
+            depends: Symfony
+        - \Helper\Api  
+        - Db:
+            dsn: 'pgsql:host=localhost;dbname=postgres'
+            user: 'postgres'
+            password: 'postgres'
+            # cleanup: true # run populator before each test
+            populate: true # run populator before all test
+            dump: 'tests/_data/dump.sql'

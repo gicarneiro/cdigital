@@ -19,10 +19,10 @@ class AutorizadorService {
     * Verifica se a transferencia está autorizada, atraves de um serviço terceirizado
     */
     public function autorizar(){
-        $resposta = $this->cliente->request('GET', 'https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6');
-        
+        $resposta = $this->cliente->request('GET', 'https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6', ['timeout' => 5]);
+   
         if($resposta->getStatusCode() != JsonResponse::HTTP_OK){
-            throw new HttpException($resposta->getStatusCode(), 'Serviço indisponível, por favor tente mais tarde');
+            throw new HttpException(JsonResponse::HTTP_BAD_GATEWAY, 'Serviço indisponível, por favor tente mais tarde');
         }
         
         return $resposta;

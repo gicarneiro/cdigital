@@ -4,48 +4,41 @@ namespace App\Controller;
 
 use App\Entity\Transacao;
 use App\Exception\NaoEncontradoException;
+use App\Service\CarteiraDigitalService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class CarteiraDigitalController extends AbstractController
-{
+class TransacaoController extends AbstractController {
+    
+    /**
+    * @var \App\Service\TransacaoService
+    */
+    private $service;
+
     /**
     * @var \App\Service\CarteiraDigitalService
     */
-    private $service;
+    private $CarteiraDigitalService;
     
-    public function __construct(\App\Service\CarteiraDigitalService $carteiraDigitalService){
-        $this->service = $carteiraDigitalService;     
+    public function __construct(\App\Service\TransacaoService $transacaoServiceService, CarteiraDigitalService $carteiraDigitalService){
+        $this->service = $transacaoServiceService;     
+        $this->carteiraDigitalService = $carteiraDigitalService;     
     }
-    
+
     /**
-    * @Route("{usuario}/carteiradigital")
+    * @todo form e validate e trnasferir a recuperação das carteiras para lá
+    * @Route("transaction", methods={"POST"}, defaults={ "_format" = "json" })
     */
-    public function getAction($usuario)
-    {
-        try{   
-            $carteiradigital = $this->service->get($usuario);  
-            return $this->json($carteiradigital);
-        } catch (NaoEncontradoException $e ) {
-            return $this->json(["message" => $e->getMessage() ], JsonResponse::HTTP_NOT_FOUND);            
-        }
-    }
-    
-    /**
-    * @todo form e validate 
-    * @Route("{usuario}/carteiradigital/transferencia", methods={"POST"}, defaults={ "_format" = "json" })
-    */
-    public function transferirAction($usuario, Request $request){
+    public function transferirAction(Request $request){
         try{
-            $carteiraDigital = $this->service->get($usuario);
-            
+
             $transacao = new Transacao();
-            $transacao->setDestinoAlias($request->get('destino'));
-            $transacao->setOrigem($carteiraDigital);
-            $transacao->setValor($request->get('valor'));
+            $transacao->setOrigem($this->carteiraDigitalService->get($request->get('payer')));
+            $transacao->setDestino($this->carteiraDigitalService->get($request->get('payee')));
+            $transacao->setValor($request->get('value'));
             
             $transferencia = $this->service->transferir($transacao);    
             
