@@ -2,14 +2,14 @@
 
 namespace App\Service;
 
-use App\Service\CarteiraDigitalService;
 use App\Entity\Transacao;
+use App\Message\TransacaoMessage;
+use App\Service\CarteiraDigitalService;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
-class TransacaoService
-{
-    
-    
+class TransacaoService {
+
     /**
     * @var Doctrine\ORM\EntityManagerInterface
     */
@@ -24,12 +24,18 @@ class TransacaoService
     * @var App/Service/CarteiraDigitalService
     */
     private $carteiraDigitalService;
+
+    /**
+    * @var Symfony\Component\Messenger\MessageBusInterface
+    */
+    private $mensageiro;
     
     
-    public function __construct(EntityManagerInterface $em, AutorizadorService $autorizador, CarteiraDigitalService $carteiraDigitalService) {
+    public function __construct(EntityManagerInterface $em, AutorizadorService $autorizador, CarteiraDigitalService $carteiraDigitalService, MessageBusInterface $mensageiro) {
         $this->em = $em;
         $this->autorizador = $autorizador;
         $this->carteiraDigitalService = $carteiraDigitalService;
+        $this->mensageiro = $mensageiro;
     }
     
     
@@ -41,7 +47,7 @@ class TransacaoService
      */
     public function transferir(Transacao $transacao): ?Transacao
     {        
-        //verifica é a origem pode enviar transacao
+        //verifica se a origem pode enviar transacao
         if($transacao->getOrigem()->getProprietario() instanceof \App\Entity\Pessoa\PessoaJuridica){
             throw new \App\Exception\TransacaoException('Carteiras de pessoas jurídicas não podem enviar transferencias');
         }
@@ -50,7 +56,6 @@ class TransacaoService
         if($this->carteiraDigitalService->simularTransferencia($transacao->getOrigem(), $transacao->getValor())){
             throw new \App\Exception\TransacaoException('Saldo insuficiente');
         }
-
 
         //realiza transação financeira
         $this->em->getConnection()->beginTransaction(); //poderia deixar implicio no flush
@@ -62,6 +67,7 @@ class TransacaoService
             $this->em->persist($transacao->getDestino());       
             $this->em->persist($transacao); //salva transacao financeira
             $this->em->flush();
+            $this->mensageiro->dispatch(new TransacaoMessage($transacao->getID()));//enfilera notificação
             $this->em->getConnection()->commit();
             
             return $transacao;

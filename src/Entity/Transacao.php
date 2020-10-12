@@ -116,4 +116,12 @@ class Transacao
 
         return $this;
     }
+
+    public function getInfo(){
+        return [
+            'id'=> $this->id,
+            'origem'=> $this->origem->getId(),
+            'destino'=> $this->destino->getId(),
+        ];
+    }
 }
