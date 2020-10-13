@@ -76,7 +76,6 @@ class CarteiraDigitalService
     */
     public function debitar(CarteiraDigital $carteiraDigital, float $valor): void { 
         $novoSaldo = $carteiraDigital->getSaldo() - $valor;
-        var_dump($novoSaldo);
         $carteiraDigital->setSaldo($novoSaldo);
         $this->em->persist($carteiraDigital);   
         $this->em->flush();

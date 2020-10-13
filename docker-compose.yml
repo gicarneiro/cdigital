@@ -2,19 +2,35 @@ version: '2'
 
 services:
 
-  # app:
-  #   build:
-  #     context: ./docker/servidor
-  #     dockerfile: Dockerfile
-  #   image: 'servidor'
-  #   ports:
-  #     - '8080:80'
-  #   volumes:
-  #     - '.:/var/www'
-  #   environment:
-  #     - SYMFONY_VERSION=5
-  #   depends_on:
-  #     - postgres
+  php-fpm:
+    build:
+      context: ./docker/php-fpm
+    depends_on:
+      - postgres
+#    network_mode:
+#        "host"
+    environment:
+      - APP_ENV=dev
+      - APP_SECRET=1230d0cc90e7bb6e17fbf72dbfb3b16c
+#      - DATABASE_URL=mysql://${DATABASE_USER}:${DATABASE_PASSWORD}@database:3306/${DATABASE_NAME}?serverVersion=5.7
+    volumes:
+      - ./:/var/www
+
+  nginx:
+    build:
+      context: ./docker/nginx
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./docker/nginx/sites/:/etc/nginx/sites-available
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d
+      - ./logs:/var/log
+#    network_mode:
+#        "host"
+    depends_on:
+      - php-fpm
+    ports:
+      - "80:80"
 
   postgres:
     image: postgres:11.5
@@ -28,7 +44,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
-    network_mode: "host"
+    # network_mode: "host"
     expose:
       - "5672"
     ports:

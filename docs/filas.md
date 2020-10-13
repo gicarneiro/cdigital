@@ -5,12 +5,12 @@ Quando uma transação é realizada, uma mensagem contendo o id da transação �
 Para consumir essa fila execute o seguinte comando em um terminal:
 
 ```
-$ php bin/console messenger:consume async -vv
+$ docker exec {nome do container do php-fpm} php bin/console messenger:consume async -vv
 ```
 
 Onde -vv exibe o log, caso não precise das informações, retire esse trecho do comando.
 
-Para acessar o RabbitMQ a fim de visualizar a fila, digite no navegador: http://localhost:15672/#/queues
+Para acessar o RabbitMQ a fim de visualizar a fila, digite no navegador: http://localhost:8080/#/queues
 
 > Quando a mensagem é consumida, além de executar tarefas próprias da regra de negócio um log de informação é salvo. Se houver problema no consumo e a notificação não puder ser executada, a mensagem é reenfileirada e um log de erro é salvo. 
 

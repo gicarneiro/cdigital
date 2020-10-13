@@ -11,7 +11,7 @@ modules:
             depends: Symfony
         - \Helper\Api  
         - Db:
-            dsn: 'pgsql:host=localhost;dbname=postgres'
+            dsn: 'pgsql:host=postgres;dbname=postgres'
             user: 'postgres'
             password: 'postgres'
             # cleanup: true # run populator before each test

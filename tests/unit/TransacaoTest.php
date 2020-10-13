@@ -1,26 +1,26 @@
 <?php
 
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpFoundation\JsonResponse;
+// use Symfony\Component\HttpKernel\Exception\HttpException;
+// use Symfony\Component\HttpFoundation\JsonResponse;
 
-class TransacaoTest extends \Codeception\Test\Unit
-{
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
+// class TransacaoTest extends \Codeception\Test\Unit
+// {
+//     /**
+//      * @var \UnitTester
+//      */
+//     protected $tester;
 
-    protected function _before(){
-    }
+//     protected function _before(){
+//     }
 
-    protected function _after(){
-    }
+//     protected function _after(){
+//     }
 
-    private function getContainer($service){
-        return $this->getModule('Symfony')->_getContainer()->get($service);
-    }
+//     private function getContainer($service){
+//         return $this->getModule('Symfony')->_getContainer()->get($service);
+//     }
 
-    public function testTranferir() {
+//     public function testTranferir() {
 
         // //cenario aplicação
         // $em = $this->getContainer('Doctrine\ORM\EntityManagerInterface');
@@ -47,5 +47,5 @@ class TransacaoTest extends \Codeception\Test\Unit
         // $transacao->transferir($transacao);
 
         //espero que dê exceção de fora do ar
-    }
-}
+//     }
+// }
