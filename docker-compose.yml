@@ -7,6 +7,7 @@ services:
       context: ./docker/php-fpm
     depends_on:
       - postgres
+      - composer
     environment:
       - APP_ENV=dev
       - APP_SECRET=1230d0cc90e7bb6e17fbf72dbfb3b16c
