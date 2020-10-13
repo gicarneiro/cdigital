@@ -11,5 +11,5 @@ RUN docker-php-ext-install pdo_pgsql
 WORKDIR /var/www
 #CMD composer install ; wait-for-it database:5432 -- bin/console doctrine:migrations:migrate ;  php-fpm 
 # CMD wait-for-it postgres:5432 && bin/console doctrine:migrations:migrate ;  php-fpm 
-CMD bin/console doctrine:migrations:migrate ;  php-fpm 
+CMD sleep 30 ; bin/console doctrine:migrations:migrate ;  php-fpm 
 EXPOSE 9000

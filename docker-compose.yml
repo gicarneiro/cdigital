@@ -2,12 +2,17 @@ version: '2'
 
 services:
 
+  composer:
+    image: composer
+    volumes:
+      - $PWD:/app
+    entrypoint: composer install
+
   php-fpm:
     build:
       context: ./docker/php-fpm
     depends_on:
       - postgres
-      - composer
     environment:
       - APP_ENV=dev
       - APP_SECRET=1230d0cc90e7bb6e17fbf72dbfb3b16c
@@ -46,8 +51,3 @@ services:
       - "8080:15672"
     restart: always
   
-  composer:
-    image: composer
-    volumes:
-      - $PWD:/app
-    entrypoint: composer install
