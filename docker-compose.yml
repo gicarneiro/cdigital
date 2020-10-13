@@ -7,12 +7,9 @@ services:
       context: ./docker/php-fpm
     depends_on:
       - postgres
-#    network_mode:
-#        "host"
     environment:
       - APP_ENV=dev
       - APP_SECRET=1230d0cc90e7bb6e17fbf72dbfb3b16c
-#      - DATABASE_URL=mysql://${DATABASE_USER}:${DATABASE_PASSWORD}@database:3306/${DATABASE_NAME}?serverVersion=5.7
     volumes:
       - ./:/var/www
 
@@ -25,8 +22,6 @@ services:
       - ./docker/nginx/sites/:/etc/nginx/sites-available
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d
       - ./logs:/var/log
-#    network_mode:
-#        "host"
     depends_on:
       - php-fpm
     ports:
@@ -44,9 +39,14 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management
-    # network_mode: "host"
     expose:
       - "5672"
     ports:
       - "8080:15672"
     restart: always
+  
+  composer:
+    image: composer
+    volumes:
+      - $PWD:/app
+    entrypoint: composer install

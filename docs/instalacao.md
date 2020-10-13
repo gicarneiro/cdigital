@@ -6,9 +6,8 @@ Serão necessários no seu ambiente:
 
 * Docker
 * Docker compose
-* Composer
 
-> docker-compose providenciará as imagens do RabbitMQ, PostgreSQL, NGINX e PHP-FPM 7.4 necessárias
+> docker-compose providenciará as imagens do Composer, RabbitMQ, PostgreSQL, NGINX e PHP-FPM 7.4 necessárias
 
 ### Instalação passo a passo
 
@@ -21,14 +20,16 @@ Serão necessários no seu ambiente:
     ```
    3. Acesse a pasta clonada
 
-2. Execute o composer na raiz do projeto
-3. Inicie os containers
+2. Inicie os containers
    
    ```
    $ docker-compose up -d
    ```
 
 > Pronto! O Projeto já pode ser acessado em localhost! 
+
+
+
 > Se quiser popular o banco de dados, execute os testes (ou rode no banco o script localizado em tests/_data/dump.sql).
 > Leia na seção de API sobre as APIs REST implementadas
 
